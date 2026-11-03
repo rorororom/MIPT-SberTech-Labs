@@ -1,0 +1,24 @@
+services:
+  master:
+    build: ./HW_3/master
+    volumes:
+      - ./HW_3:/ansible:ro
+      - ./.ssh/id_ed25519:/root/.ssh/id_ed25519:ro
+    networks: [lab]
+
+  nginx:
+    build: ./HW_3/node
+    ports:
+      - "8081:80"
+    volumes:
+      - ./.ssh/id_ed25519.pub:/key.pub:ro
+    networks: [lab]
+
+  app:
+    build: ./HW_3/node
+    volumes:
+      - ./.ssh/id_ed25519.pub:/key.pub:ro
+    networks: [lab]
+
+networks:
+  lab:
