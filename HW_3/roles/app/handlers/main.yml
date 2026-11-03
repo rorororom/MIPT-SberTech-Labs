@@ -1,2 +1,0 @@
-- name: Restart app
-  command: /opt/app/start.sh restart

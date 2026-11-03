@@ -10,7 +10,6 @@
     src: "{{ playbook_dir }}/nginx/default.conf"
     dest: /etc/nginx/sites-available/default
     mode: "0644"
-  notify: Reload nginx
 
 - name: Check nginx config
   command: nginx -t
@@ -19,11 +18,8 @@
 - name: Start nginx
   service:
     name: nginx
-    state: started
+    state: restarted
     use: sysvinit
-
-- name: Apply nginx changes
-  meta: flush_handlers
 
 - name: Check proxy
   uri:

@@ -23,15 +23,9 @@
     dest: /opt/app
     owner: root
     group: root
-  notify: Restart app
-
-- name: Apply app changes
-  meta: flush_handlers
 
 - name: Start app
   command: /opt/app/start.sh
-  args:
-    creates: /run/app.pid
 
 - name: Check app
   uri:
