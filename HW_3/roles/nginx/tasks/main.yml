@@ -1,0 +1,30 @@
+- name: Install nginx
+  apt:
+    name: nginx
+    update_cache: true
+    cache_valid_time: 3600
+    policy_rc_d: 101
+
+- name: Copy nginx config
+  copy:
+    src: "{{ playbook_dir }}/nginx/default.conf"
+    dest: /etc/nginx/sites-available/default
+    mode: "0644"
+  notify: Reload nginx
+
+- name: Check nginx config
+  command: nginx -t
+  changed_when: false
+
+- name: Start nginx
+  service:
+    name: nginx
+    state: started
+    use: sysvinit
+
+- name: Apply nginx changes
+  meta: flush_handlers
+
+- name: Check proxy
+  uri:
+    url: http://127.0.0.1/health

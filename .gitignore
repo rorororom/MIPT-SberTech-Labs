@@ -3,3 +3,5 @@
 !.env.example
 __pycache__/
 *.pyc
+.ssh/
+HW_3/app.tar.gz
