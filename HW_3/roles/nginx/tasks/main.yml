@@ -1,0 +1,34 @@
+- name: Install nginx
+  apt:
+    name: nginx
+    update_cache: true
+    cache_valid_time: 3600
+    policy_rc_d: 101
+
+- name: Copy nginx config
+  copy:
+    content: |
+      server {
+          listen 80;
+
+          location / {
+              proxy_pass http://app:8080;
+              proxy_set_header Host $host;
+          }
+      }
+    dest: /etc/nginx/sites-available/default
+    mode: "0644"
+
+- name: Check nginx config
+  command: nginx -t
+  changed_when: false
+
+- name: Start nginx
+  service:
+    name: nginx
+    state: restarted
+    use: sysvinit
+
+- name: Check proxy
+  uri:
+    url: http://127.0.0.1/health

@@ -1,0 +1,22 @@
+- name: Check servers
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Wait for SSH
+      wait_for_connection:
+        timeout: 60
+    - name: Read server facts
+      setup:
+    - name: Check OS
+      assert:
+        that: ansible_facts['os_family'] == 'Debian'
+
+- name: Deploy app
+  hosts: apps
+  roles:
+    - app
+
+- name: Configure nginx
+  hosts: web
+  roles:
+    - nginx
